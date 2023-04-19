@@ -42,13 +42,13 @@ const player = Player.singleton(client,
         maxNumberOfChoices: 10, // Maximum autocomplete choices, shouldn't be more than 25
     }
 );
-player.extractors.register(YouTubeExtractor, null);
-player.extractors.register(SpotifyExtractor, null);
-player.extractors.register(SoundCloudExtractor, null);
-player.extractors.register(AppleMusicExtractor, null);
-player.extractors.register(VimeoExtractor, null);
-player.extractors.register(ReverbnationExtractor, null);
-player.extractors.register(AttachmentExtractor, null);
+player.extractors.register(YouTubeExtractor, {});
+player.extractors.register(SpotifyExtractor, {});
+player.extractors.register(SoundCloudExtractor, {});
+player.extractors.register(AppleMusicExtractor, {});
+player.extractors.register(VimeoExtractor, {});
+player.extractors.register(ReverbnationExtractor, {});
+player.extractors.register(AttachmentExtractor, {});
 
 
 player.events.on("playerStart", (queue, track) => {
