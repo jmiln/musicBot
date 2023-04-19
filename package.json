@@ -1,21 +1,17 @@
 {
-    "name": "swgohbot",
-    "version": "2.0.0",
-    "description": "Discord bot for the Star Wars Galaxy of Heroes game.",
-    "main": "swgohBot.js",
+    "name": "musicbot",
+    "version": "1.0.0",
+    "description": "Personal music bot",
+    "main": "shardIndex.js",
     "scripts": {
         "lint": "eslint",
-        "start": "node swgohBotShard.js"
+        "start": "node shardIndex.js"
     },
     "author": "Jeffrey Milner",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/jmiln/SWGoHBot/issues"
-    },
-    "homepage": "https://github.com/jmiln/SWGoHBot#readme",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/jmiln/SWGoHBot.git"
+        "url": "git+https://github.com/jmiln/musicBot.git"
     },
     "dependencies": {
         "@discord-player/extractor": "^4.2.1",
