@@ -2,6 +2,8 @@ const { Client, Collection, GatewayIntentBits, EmbedBuilder } = require("discord
 const { readdirSync } = require("fs");
 const { inspect } = require("util");
 const { Player } = require("discord-player");
+const { YouTubeExtractor, SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor, VimeoExtractor, AttachmentExtractor, ReverbnationExtractor } = require("@discord-player/extractor");
+
 
 const { buttonRow } = require("./modules/buttons.js");
 
@@ -40,6 +42,14 @@ const player = Player.singleton(client,
         maxNumberOfChoices: 10, // Maximum autocomplete choices, shouldn't be more than 25
     }
 );
+player.extractors.register(YouTubeExtractor, null);
+player.extractors.register(SpotifyExtractor, null);
+player.extractors.register(SoundCloudExtractor, null);
+player.extractors.register(AppleMusicExtractor, null);
+player.extractors.register(VimeoExtractor, null);
+player.extractors.register(ReverbnationExtractor, null);
+player.extractors.register(AttachmentExtractor, null);
+
 
 player.events.on("playerStart", (queue, track) => {
     // we will later define queue.metadata object while creating the queue
