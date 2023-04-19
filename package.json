@@ -1,0 +1,33 @@
+{
+    "name": "swgohbot",
+    "version": "2.0.0",
+    "description": "Discord bot for the Star Wars Galaxy of Heroes game.",
+    "main": "swgohBot.js",
+    "scripts": {
+        "lint": "eslint",
+        "start": "node swgohBotShard.js"
+    },
+    "author": "Jeffrey Milner",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/jmiln/SWGoHBot/issues"
+    },
+    "homepage": "https://github.com/jmiln/SWGoHBot#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jmiln/SWGoHBot.git"
+    },
+    "dependencies": {
+        "@discord-player/extractor": "^4.2.1",
+        "@discordjs/builders": "^1.6.1",
+        "@discordjs/opus": "^0.9.0",
+        "@discordjs/rest": "^1.7.0",
+        "@discordjs/voice": "^0.16.0",
+        "discord-player": "^6.2.1",
+        "discord.js": "^14.9.0",
+        "ytdl-core": "^4.11.4"
+    },
+    "engines": {
+        "node": ">=16"
+    }
+}
