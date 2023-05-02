@@ -202,8 +202,8 @@ const init = async () => {
             // Don't bother doing anything
         }
         // Always best practice to let the code crash on uncaught exceptions.
-            // Because you should be catching them anyway.
-            process.exit(1);
+        // Because you should be catching them anyway.
+        process.exit(1);
     });
 
     process.on("unhandledRejection", (err) => {

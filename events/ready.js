@@ -8,8 +8,6 @@ module.exports = async (Bot, client) => {
         readyString = `${client.user.username} is ready to serve in ${client.guilds.cache.size} servers. Shard #${client.shard.id}`;
     }
 
-    console.log(Bot.commandList);
-
     Bot.logger.log(readyString, "ready", true);
 
     setTimeout(async () => {
