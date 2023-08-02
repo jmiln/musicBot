@@ -1,6 +1,6 @@
 const Command = require("../base/slashCommand");
 const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 
 // 993765001892474984
 
@@ -23,7 +23,7 @@ class Play extends Command {
         const channel = interaction.member.voice.channel;
         if (!channel) return interaction.reply("You are not connected to a voice channel!"); // make sure we have a voice channel
         const query = interaction.options.getString("track"); // we need input/query to play
-        const player = useMasterPlayer();
+        const player = useMainPlayer();
         if (!player) return super.error(interaction, "No player found/ couldn't make one.");
 
         // let's defer the interaction as things can take time to process

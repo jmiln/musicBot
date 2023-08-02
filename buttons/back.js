@@ -1,9 +1,9 @@
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 
 module.exports = {
     name: "prev_song",
     async run(interaction) {
-        const player = useMasterPlayer();
+        const player = useMainPlayer();
         const queue = player?.nodes.get(interaction.guild.id);
 
         if (!queue?.history.tracks.toArray().length) {

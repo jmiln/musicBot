@@ -1,5 +1,5 @@
 const Command = require("../base/slashCommand");
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 const { buttonRow } = require("../modules/buttons.js");
 
 class Queue extends Command {
@@ -15,7 +15,7 @@ class Queue extends Command {
         const channel = interaction.member.voice.channel;
         if (!channel) return interaction.reply("You are not connected to a voice channel!"); // make sure we have a voice channel
 
-        const player = useMasterPlayer();
+        const player = useMainPlayer();
         if (!player) return super.error(interaction, "No player found/ couldn't make one.");
 
         // let's defer the interaction as things can take time to process

@@ -1,9 +1,9 @@
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 
 module.exports = {
     name: "pause_play_song",
     async run(interaction) {
-        const player = useMasterPlayer();
+        const player = useMainPlayer();
         const queue = player?.nodes.get(interaction.guild.id);
 
         if (!queue || !queue.isPlaying()) {
