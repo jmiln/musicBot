@@ -20,8 +20,16 @@ class Play extends Command {
     }
 
     async run(Bot, interaction) {
-        const channel = interaction.member.voice.channel;
-        if (!channel) return interaction.reply("You are not connected to a voice channel!"); // make sure we have a voice channel
+
+        // Redirect to the proper channel if set
+        const gId = interaction.guild.id;
+        const ignoreChannels = Bot.config.ignoreChannels;
+        if (ignoreChannels?.[gId] && interaction.channel !== ignoreChannels[gId]) {
+            return super.error(interaction, `Sorry, but this bot is limited to <#${ignoreChannels[gId]}}> only.`);
+        }
+
+        const vChannel = interaction.member.voice.channel;
+        if (!vChannel) return interaction.reply("You are not connected to a voice channel!"); // make sure we have a voice channel
         const query = interaction.options.getString("track"); // we need input/query to play
         const player = useMainPlayer();
         if (!player) return super.error(interaction, "No player found/ couldn't make one.");
