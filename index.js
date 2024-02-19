@@ -85,9 +85,10 @@ player.events.on("error", (queue, error) => {
     console.log(`General player error event: ${error.message}`);
     console.log(error);
 });
-player.events.on("playerError", (queue, error) => {
+player.events.on("playerError", (queue, error, track) => {
     // Emitted when the audio player errors while streaming audio track
     console.log(`Player error event: ${error.message}`);
+    console.log(`Track: ${track.title}\nAuthor: ${track.author}\nURL: ${track.url}`);
     console.log(error);
 });
 // player.events.on("audioTrackAdd", (queue, track) => {

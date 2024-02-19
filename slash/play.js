@@ -24,8 +24,8 @@ class Play extends Command {
         // Redirect to the proper channel if set
         const gId = interaction.guild.id;
         const ignoreChannels = Bot.config.ignoreChannels;
-        if (ignoreChannels?.[gId] && interaction.channel !== ignoreChannels[gId]) {
-            return super.error(interaction, `Sorry, but this bot is limited to <#${ignoreChannels[gId]}}> only.`);
+        if (ignoreChannels?.[gId] && interaction.channel.id !== ignoreChannels[gId]) {
+            return super.error(interaction, `Sorry, but this bot is limited to <#${ignoreChannels[gId]}> only.`);
         }
 
         const vChannel = interaction.member.voice.channel;
