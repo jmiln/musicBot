@@ -30,7 +30,10 @@ class Play extends Command {
 
         const vChannel = interaction.member.voice.channel;
         if (!vChannel) return interaction.reply("You are not connected to a voice channel!"); // make sure we have a voice channel
+
         const query = interaction.options.getString("track"); // we need input/query to play
+        if (query.toLowerCase().includes("youtube")) return super.error(interaction, "Youtube links are not supported. Try entering the song title (title + artist if it's not finding the right one), or a spotify link.");
+
         const player = useMainPlayer();
         if (!player) return super.error(interaction, "No player found/ couldn't make one.");
 
