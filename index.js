@@ -2,8 +2,6 @@ const { Client, Collection, GatewayIntentBits, EmbedBuilder } = require("discord
 const { readdirSync } = require("fs");
 const { inspect } = require("util");
 const { Player } = require("discord-player");
-const { YouTubeExtractor, SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor, VimeoExtractor, AttachmentExtractor, ReverbnationExtractor } = require("@discord-player/extractor");
-
 
 const { buttonRow } = require("./modules/buttons.js");
 
@@ -21,35 +19,14 @@ const client = new Client({
     closeTimeout: 30_000
 });
 
-const player = Player.singleton(client,
-    {
-        autoRegisterExtractor: false,
-        maxVol: 100,
-        defaultvolume: 80,
-        minVol: 0,
-        leaveOnEnd: false,
-        leaveOnStop: false,
-        leaveOnEmpty: true,
-        leaveOnEmptyCooldown: 30_000, // 30 seconds
-        // discordPlayer: {
-        ytdlOptions: {
-            quality: "highestaudio",
-            filter: "audioonly",
-            highWaterMark: 1 << 30,
-            dlChunkSize: 0
-            // }
-        },
-        maxNumberOfChoices: 10, // Maximum autocomplete choices, shouldn't be more than 25
-    }
-);
-player.extractors.register(YouTubeExtractor, {});
-player.extractors.register(SpotifyExtractor, {});
-player.extractors.register(SoundCloudExtractor, {});
-player.extractors.register(AppleMusicExtractor, {});
-player.extractors.register(VimeoExtractor, {});
-player.extractors.register(ReverbnationExtractor, {});
-player.extractors.register(AttachmentExtractor, {});
-
+const player = new Player(client, {
+    ytdlOptions: {
+        quality: "highestaudio",
+        filter: "audioonly",
+        highWaterMark: 1 << 30,
+        dlChunkSize: 0
+    },
+});
 
 player.events.on("playerStart", (queue, track) => {
     // we will later define queue.metadata object while creating the queue

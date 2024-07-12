@@ -32,7 +32,7 @@ class Play extends Command {
         if (!vChannel) return interaction.reply("You are not connected to a voice channel!"); // make sure we have a voice channel
 
         const query = interaction.options.getString("track"); // we need input/query to play
-        if (query.toLowerCase().includes("youtube")) return super.error(interaction, "Youtube links are not supported. Try entering the song title (title + artist if it's not finding the right one), or a spotify link.");
+        // if (query.toLowerCase().includes("youtube")) return super.error(interaction, "Youtube links are not supported. Try entering the song title (title + artist if it's not finding the right one), or a spotify link.");
 
         const player = useMainPlayer();
         if (!player) return super.error(interaction, "No player found/ couldn't make one.");
@@ -47,6 +47,7 @@ class Play extends Command {
                 leaveOnEnd: false,
                 leaveOnStop: false,
                 leaveOnEmpty: true,
+                leaveOnEmptyCooldown: 30_000, // 30 seconds
                 metadata: {
                     channel: interaction.channel,
                     client: interaction.guild.members.me,
@@ -91,12 +92,12 @@ class Play extends Command {
                 return super.error(interaction, "This media doesn't seem to be working right now, please try again later.");
             }
 
-
             const playEmbed = new EmbedBuilder()
                 .setColor("Random")
                 .setTitle(
                     `🎶 | New ${res.playlist ? "playlist" : "song"} Added to queue. ${res.playlist ? res.tracks.length + " tracks added" : "" }`,
                 );
+
             if (!res.playlist) {
                 const tr = res.tracks[0];
                 playEmbed.setThumbnail(tr.thumbnail);
