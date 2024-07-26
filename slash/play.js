@@ -10,17 +10,18 @@ class Play extends Command {
             name: "play",
             description: "Play a song or playlist",
             guildOnly: false,
-            options: [{
-                name: "track",
-                type: ApplicationCommandOptionType.String,
-                description: "The song or playlist to try and play",
-                required: true,
-            }]
+            options: [
+                {
+                    name: "track",
+                    type: ApplicationCommandOptionType.String,
+                    description: "The song or playlist to try and play",
+                    required: true,
+                },
+            ],
         });
     }
 
     async run(Bot, interaction) {
-
         // Redirect to the proper channel if set
         const gId = interaction.guild.id;
         const ignoreChannels = Bot.config.ignoreChannels;
@@ -68,11 +69,13 @@ class Play extends Command {
 
             if (!res || !res.tracks || res.tracks.length === 0) {
                 return interaction.editReply({
-                    embeds: [{
-                        description: `❌ | No Video/Song/Playlist was found when searching for: ${query}`,
-                    }],
+                    embeds: [
+                        {
+                            description: `❌ | No Video/Song/Playlist was found when searching for: ${query}`,
+                        },
+                    ],
                     ephemeral: true,
-                    color: "Red"
+                    color: "Red",
                 });
             }
 
@@ -95,7 +98,7 @@ class Play extends Command {
             const playEmbed = new EmbedBuilder()
                 .setColor("Random")
                 .setTitle(
-                    `🎶 | New ${res.playlist ? "playlist" : "song"} Added to queue. ${res.playlist ? res.tracks.length + " tracks added" : "" }`,
+                    `🎶 | New ${res.playlist ? "playlist" : "song"} Added to queue. ${res.playlist ? `${res.tracks.length} tracks added` : ""}`,
                 );
 
             if (!res.playlist) {
@@ -103,7 +106,9 @@ class Play extends Command {
                 playEmbed.setThumbnail(tr.thumbnail);
                 playEmbed.setDescription(`[${tr.title}](${tr.url}) by **${tr.author}**`);
             } else {
-                playEmbed.setDescription(`**${res.tracks.length} tracks** from the ${res.playlist.type} **[${res.playlist.title}](${res.playlist.url})** have been loaded into the server queue.`);
+                playEmbed.setDescription(
+                    `**${res.tracks.length} tracks** from the ${res.playlist.type} **[${res.playlist.title}](${res.playlist.url})** have been loaded into the server queue.`,
+                );
                 // console.log(`[musico /play] Playing playlist with ${res.tracks.length} tracks.\n${res.tracks.map(tr => " - " + tr.title).join("\n")}`);
             }
 
@@ -134,4 +139,3 @@ class Play extends Command {
 }
 
 module.exports = Play;
-

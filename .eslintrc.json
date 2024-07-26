@@ -7,8 +7,8 @@
         "node": true
     },
     "extends": "eslint:recommended",
-    "globals":{
-        "BigInt":true
+    "globals": {
+        "BigInt": true
     },
     "rules": {
         "no-console": "off",
@@ -19,43 +19,38 @@
                 "SwitchCase": 1
             }
         ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "semi": [
-            "warn",
-            "always"
-        ],
+        "linebreak-style": ["error", "unix"],
+        "semi": ["warn", "always"],
         "keyword-spacing": [
-            "error", {
+            "error",
+            {
                 "before": true,
                 "after": true
             }
         ],
         "space-before-blocks": [
-            "error", {
-                "functions":"always",
+            "error",
+            {
+                "functions": "always",
                 "keywords": "always",
                 "classes": "always"
             }
         ],
         "space-before-function-paren": [
-            "error", {
+            "error",
+            {
                 "anonymous": "never",
                 "named": "never",
                 "asyncArrow": "always"
             }
         ],
         "prefer-const": [
-            "error", {
+            "error",
+            {
                 "destructuring": "all",
                 "ignoreReadBeforeAssign": false
             }
         ],
-        "quotes": [
-            "error",
-            "double"
-        ]
+        "quotes": ["error", "double"]
     }
 }

@@ -7,7 +7,7 @@ class Queue extends Command {
         super(Bot, {
             name: "queue",
             description: "See what's in your queue",
-            guildOnly: false
+            guildOnly: false,
         });
     }
 
@@ -40,19 +40,18 @@ class Queue extends Command {
         const progress = queue.node.createProgressBar();
 
         return interaction.editReply({
-            embeds: [{
-                title: `Server Queue - ${interaction.guild.name}`,
-                description: `**Current Track**: [${queue.currentTrack?.title}](${queue.currentTrack?.url}) by **${queue.currentTrack?.author}**\n${progress}\n\n${tracks.slice(0, 5).join("\n")}\n\n${nextSongs}`,
-                thumbnail: {
-                    url: queue.currentTrack?.thumbnail
+            embeds: [
+                {
+                    title: `Server Queue - ${interaction.guild.name}`,
+                    description: `**Current Track**: [${queue.currentTrack?.title}](${queue.currentTrack?.url}) by **${queue.currentTrack?.author}**\n${progress}\n\n${tracks.slice(0, 5).join("\n")}\n\n${nextSongs}`,
+                    thumbnail: {
+                        url: queue.currentTrack?.thumbnail,
+                    },
                 },
-            }],
-            components: [
-                buttonRow
-            ]
+            ],
+            components: [buttonRow],
         });
     }
 }
 
 module.exports = Queue;
-

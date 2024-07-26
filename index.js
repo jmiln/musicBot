@@ -1,6 +1,6 @@
 const { Client, Collection, GatewayIntentBits, EmbedBuilder } = require("discord.js");
-const { readdirSync } = require("fs");
-const { inspect } = require("util");
+const { readdirSync } = require("node:fs");
+const { inspect } = require("node:util");
 const { Player } = require("discord-player");
 
 const { buttonRow } = require("./modules/buttons.js");
@@ -11,12 +11,8 @@ const Bot = {};
 Bot.config = require("./config.js");
 
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildVoiceStates
-    ],
-    closeTimeout: 30_000
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates],
+    closeTimeout: 30_000,
 });
 
 const player = new Player(client, {
@@ -24,7 +20,7 @@ const player = new Player(client, {
         quality: "highestaudio",
         filter: "audioonly",
         highWaterMark: 1 << 30,
-        dlChunkSize: 0
+        dlChunkSize: 0,
     },
 });
 
@@ -38,11 +34,11 @@ player.events.on("playerStart", (queue, track) => {
                 .setDescription(`**${track.title}**`)
                 .setThumbnail(track.thumbnail)
                 .addFields([
-                    {name: "DURATION",  value: `${track?.duration ? track.duration : "N/A"}s`, inline: true},
-                    {name: "REQUESTER", value: `${track.requestedBy}`,  inline: true},
-                    {name: "ARTIST",    value: track.author,                     inline: true},
-                    {name: "URL",       value: `**[Click Here](${track.url})**`, inline: false},
-                ])
+                    { name: "DURATION", value: `${track?.duration ? track.duration : "N/A"}s`, inline: true },
+                    { name: "REQUESTER", value: `${track.requestedBy}`, inline: true },
+                    { name: "ARTIST", value: track.author, inline: true },
+                    { name: "URL", value: `**[Click Here](${track.url})**`, inline: false },
+                ]),
         ],
         components: [buttonRow],
     });
@@ -120,23 +116,24 @@ const init = async () => {
     // here and everywhere else.
     const slashFiles = readdirSync("./slash/");
     const slashError = [];
-    slashFiles.forEach(file => {
+    for (const file of slashFiles) {
         try {
             if (!file.endsWith(".js")) return;
             const commandName = file.split(".")[0];
             const result = client.loadSlash(commandName);
             if (result) slashError.push(`Unable to load command: ${commandName}`);
         } catch (err) {
-            return console.error(err);
+            console.error(err);
+            break;
         }
-    });
+    }
     if (slashError.length) {
-        Bot.logger.warn("slashLoad: " + slashError.join("\n"));
+        Bot.logger.warn(`slashLoad: ${slashError.join("\n")}`);
     }
 
     // Then we load events, which will include our message and ready event.
     const evtFiles = readdirSync("./events/");
-    evtFiles.forEach(file => {
+    for (const file of evtFiles) {
         const eventName = file.split(".")[0];
         const event = require(`./events/${file}`);
         if (["ready", "interactionCreate", "messageCreate", "guildMemberAdd", "guildMemberRemove"].includes(eventName)) {
@@ -145,12 +142,12 @@ const init = async () => {
             client.on(eventName, event.bind(null, Bot));
         }
         delete require.cache[require.resolve(`./events/${file}`)];
-    });
+    }
 
     // Then the buttons
     const buttonFiles = readdirSync("./buttons/");
     const buttonError = [];
-    buttonFiles.forEach(file => {
+    for (const file of buttonFiles) {
         if (!file.endsWith(".js")) return;
         const buttonName = file.split(".")[0];
         const buttonPath = `./buttons/${file}`;
@@ -160,11 +157,12 @@ const init = async () => {
             // delete require.cache[require.resolve(buttonPath)];
         } catch (err) {
             buttonError.push(`Unable to load button: ${buttonName}`);
-            return console.error(err);
+            console.error(err);
+            break;
         }
-    });
+    }
     if (buttonError.length) {
-        Bot.logger.warn("buttonLoad: " + buttonError.join("\n"));
+        Bot.logger.warn(`buttonLoad: ${buttonError.join("\n")}`);
     }
 
     process.on("uncaughtException", (err) => {
@@ -174,7 +172,7 @@ const init = async () => {
         // If it's that error, don't bother showing it again
         try {
             if (!errorMsg?.startsWith("Error: RSV2 and RSV3 must be clear") && Bot.config.logs.logToChannel) {
-                client.channels.cache.get(Bot.config.logs.channel)?.send("```inspect(errorMsg)```",{split: true});
+                client.channels.cache.get(Bot.config.logs.channel)?.send("```inspect(errorMsg)```", { split: true });
             }
         } catch (e) {
             // Don't bother doing anything
@@ -189,12 +187,12 @@ const init = async () => {
 
         // If it's something I can't do anything about, ignore it
         const ignoreArr = [
-            "Internal Server Error",                // Something on Discord's end
-            "The user aborted a request",           // Pretty sure this is also on Discord's end
-            "Cannot send messages to this user",    // A user probably has the bot blocked or doesn't allow DMs (No way to check for that)
-            "Unknown Message"                       // Not sure, but seems to happen when someone deletes a message that the bot is trying to reply to?
+            "Internal Server Error", // Something on Discord's end
+            "The user aborted a request", // Pretty sure this is also on Discord's end
+            "Cannot send messages to this user", // A user probably has the bot blocked or doesn't allow DMs (No way to check for that)
+            "Unknown Message", // Not sure, but seems to happen when someone deletes a message that the bot is trying to reply to?
         ];
-        const errStr = ignoreArr.find(elem => errorMsg.includes(elem));
+        const errStr = ignoreArr.find((elem) => errorMsg.includes(elem));
         if (errStr) {
             return console.error(`[${Bot.myTime()}] Uncaught Promise Error: ${errStr}`);
         }
@@ -202,7 +200,7 @@ const init = async () => {
         console.error(`[${Bot.myTime()}] Uncaught Promise Error: ${errorMsg}`);
         try {
             if (Bot.config.logs.logToChannel) {
-                client.channels.cache.get(Bot.config.logs.channel)?.send(`\`\`\`${inspect(errorMsg)}\`\`\``,{split: true});
+                client.channels.cache.get(Bot.config.logs.channel)?.send(`\`\`\`${inspect(errorMsg)}\`\`\``, { split: true });
             }
         } catch (e) {
             // Don't bother doing anything

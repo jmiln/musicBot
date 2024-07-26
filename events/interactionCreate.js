@@ -1,12 +1,12 @@
-const {inspect} = require("node:util");
+const { inspect } = require("node:util");
 const ignoreArr = [
     "DiscordAPIError: Missing Access",
     "HTTPError [AbortError]: The user aborted a request.",
-    "Internal Server Error",                // Something on Discord's end
-    "The user aborted a request",           // Pretty sure this is also on Discord's end
-    "Cannot send messages to this user",    // A user probably has the bot blocked or doesn't allow DMs (No way to check for that)
-    "Unknown interaction",                  // Not sure, but seems to happen when someone deletes an interaction that the bot is trying to reply to?
-    "Unknown message"                       // Not sure, but seems to happen when someone deletes a message that the bot is trying to reply to?
+    "Internal Server Error", // Something on Discord's end
+    "The user aborted a request", // Pretty sure this is also on Discord's end
+    "Cannot send messages to this user", // A user probably has the bot blocked or doesn't allow DMs (No way to check for that)
+    "Unknown interaction", // Not sure, but seems to happen when someone deletes an interaction that the bot is trying to reply to?
+    "Unknown message", // Not sure, but seems to happen when someone deletes a message that the bot is trying to reply to?
 ];
 
 module.exports = async (Bot, client, interaction) => {
@@ -44,28 +44,39 @@ module.exports = async (Bot, client, interaction) => {
             // console.log(`[interCreate] Trying to run: ${cmd.commandData.name}\n - Options: ${inspect(interaction.options, {depth: 5})}`);
         } catch (err) {
             if (cmd.commandData.name === "test") {
-                return console.log(`ERROR(inter) (user: ${interaction.user.id}) I broke with ${cmd.commandData.name}: \nOptions: ${inspect(interaction.options, {depth: 5})} \n${inspect(err, {depth: 5})}`, true);
+                return console.log(
+                    `ERROR(inter) (user: ${interaction.user.id}) I broke with ${cmd.commandData.name}: \nOptions: ${inspect(interaction.options, { depth: 5 })} \n${inspect(err, { depth: 5 })}`,
+                    true,
+                );
             }
 
-            if (ignoreArr.some(str => err.toString().includes(str))) {
+            if (ignoreArr.some((str) => err.toString().includes(str))) {
                 // Don't bother spitting out the whole mess.
                 // Log which command broke, and the first line of the error
-                logErr(`ERROR(inter) (user: ${interaction.user.id}) I broke with ${cmd.commandData.name}: \n${err.toString().split("\n")[0]}`);
+                logErr(
+                    `ERROR(inter) (user: ${interaction.user.id}) I broke with ${cmd.commandData.name}: \n${err.toString().split("\n")[0]}`,
+                );
             } else {
-                logErr(`ERROR(inter) (user: ${interaction.user.id}) I broke with ${cmd.commandData.name}: \nOptions: ${inspect(interaction.options, {depth: 5})} \n${inspect(err, {depth: 5})}`, true);
+                logErr(
+                    `ERROR(inter) (user: ${interaction.user.id}) I broke with ${cmd.commandData.name}: \nOptions: ${inspect(interaction.options, { depth: 5 })} \n${inspect(err, { depth: 5 })}`,
+                    true,
+                );
             }
 
-            const replyObj = {content: "It looks like something broke when trying to run that command.", ephemeral: true};
+            const replyObj = { content: "It looks like something broke when trying to run that command.", ephemeral: true };
             if (interaction.replied) {
-                return interaction.followUp(replyObj)
-                    .catch(e => logErr(`[cmd:${cmd.commandData.name}] Error trying to send followUp error message: \n${e}`));
-            } else if (interaction.deferred) {
-                return interaction.editReply(replyObj)
-                    .catch(e => logErr(`[cmd:${cmd.commandData.name}] Error trying to send editReply error message: \n${e}`));
-            } else {
-                return interaction.reply(replyObj)
-                    .catch(e => logErr(`[cmd:${cmd.commandData.name}] Error trying to send reply error message: \n${e}`));
+                return interaction
+                    .followUp(replyObj)
+                    .catch((e) => logErr(`[cmd:${cmd.commandData.name}] Error trying to send followUp error message: \n${e}`));
             }
+            if (interaction.deferred) {
+                return interaction
+                    .editReply(replyObj)
+                    .catch((e) => logErr(`[cmd:${cmd.commandData.name}] Error trying to send editReply error message: \n${e}`));
+            }
+            return interaction
+                .reply(replyObj)
+                .catch((e) => logErr(`[cmd:${cmd.commandData.name}] Error trying to send reply error message: \n${e}`));
         }
     } else if (interaction.isButton()) {
         const button = client.buttons.get(interaction.customId);
@@ -76,15 +87,10 @@ module.exports = async (Bot, client, interaction) => {
             Bot.logger.error("An error occurred whilst attempting to execute a button command:");
             Bot.logger.error(error);
         }
-
     }
 
-    function logErr(errStr, useWebhook=false) {
-        if (ignoreArr.some(str => errStr.toString().includes(str))) return;
+    function logErr(errStr, useWebhook = false) {
+        if (ignoreArr.some((str) => errStr.toString().includes(str))) return;
         Bot.logger.error(errStr, useWebhook);
     }
 };
-
-
-
-

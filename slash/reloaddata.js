@@ -14,15 +14,14 @@ class ReloadData extends Command {
                     description: "What to reload",
                     type: ApplicationCommandOptionType.String,
                     required: true,
-                    choices: [
-                        {name: "Deploy Commands", value: "Deploy"},
-                    ]
-                }
-            ]
+                    choices: [{ name: "Deploy Commands", value: "Deploy" }],
+                },
+            ],
         });
     }
 
-    async run(Bot, interaction) { // eslint-disable-line no-unused-vars
+    async run(Bot, interaction) {
+        // eslint-disable-line no-unused-vars
         const channelId = interaction.channel.id;
         const action = interaction.options.getString("target").toLowerCase();
 
@@ -35,10 +34,10 @@ class ReloadData extends Command {
                         {
                             title: "Deployed Commands",
                             description: outLog?.length ? null : "Nothing deployed",
-                            fields: outLog?.length ? outLog : null
-                        }
+                            fields: outLog?.length ? outLog : null,
+                        },
                     ],
-                    ephemeral: true
+                    ephemeral: true,
                 });
             }
             default:
@@ -48,24 +47,24 @@ class ReloadData extends Command {
 
     thenRes(Bot, interaction, res, reloadType) {
         const errors = [];
-        res.forEach(r => {
+        for (const r of res) {
             if (r?.err) errors.push(r.err);
-        });
+        }
         const uniqueErrors = [...new Set(errors)];
         return interaction.reply({
-            content: uniqueErrors.length ? "**ERROR**\n" + Bot.codeBlock(uniqueErrors.join("\n")) : `> ${reloadType} reloaded!`
+            content: uniqueErrors.length ? `**ERROR**\n${Bot.codeBlock(uniqueErrors.join("\n"))}` : `> ${reloadType} reloaded!`,
         });
     }
 
     thenResFiles(Bot, interaction, res) {
         let errors = [];
-        res.forEach(r => {
+        for (const r of res) {
             if (r.errArr?.length) errors.push(...r.errArr);
-        });
+        }
         errors = [...new Set(errors)];
-        const resOut = res.map(r => `${r.succArr.length.toString().padStart(4)} | ${r.errArr.length}`);
+        const resOut = res.map((r) => `${r.succArr.length.toString().padStart(4)} | ${r.errArr.length}`);
         return interaction.reply({
-            content: Bot.codeBlock(`Succ | Err\n${resOut.join("\n")}${errors.length ? "\n\nErrors in files:\n" + errors.join("\n") : ""}`)
+            content: Bot.codeBlock(`Succ | Err\n${resOut.join("\n")}${errors.length ? `\n\nErrors in files:\n${errors.join("\n")}` : ""}`),
         });
     }
 }

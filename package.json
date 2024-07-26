@@ -27,10 +27,10 @@
     "engines": {
         "node": ">=16"
     },
-    "devDependencies": {
-        "eslint": "^8.57.0"
-    },
     "overrides": {
         "undici": "^5.28.2"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.8.3"
     }
 }

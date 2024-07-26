@@ -9,7 +9,7 @@ class NowPlaying extends Command {
         super(Bot, {
             name: "nowplaying",
             description: "See what the current playing song is",
-            guildOnly: false
+            guildOnly: false,
         });
     }
 
@@ -28,7 +28,6 @@ class NowPlaying extends Command {
             return super.error(interaction, "There isn't currently any music playing.");
         }
 
-
         if (!queue?.currentTrack) {
             return super.error(interaction, "There isn't anything playing currently.");
         }
@@ -36,19 +35,18 @@ class NowPlaying extends Command {
         const progress = queue.node.createProgressBar();
 
         return interaction.editReply({
-            embeds: [{
-                title: "Currently Playing",
-                description: `${progress}\n  \n**[${queue.currentTrack.title}](${queue.currentTrack.url})** by **${queue.currentTrack.author}**. \nThis track was requested by <@${queue.currentTrack.requestedBy?.id}>.`,
-                thumbnail: {
-                    url: queue.currentTrack?.thumbnail
+            embeds: [
+                {
+                    title: "Currently Playing",
+                    description: `${progress}\n  \n**[${queue.currentTrack.title}](${queue.currentTrack.url})** by **${queue.currentTrack.author}**. \nThis track was requested by <@${queue.currentTrack.requestedBy?.id}>.`,
+                    thumbnail: {
+                        url: queue.currentTrack?.thumbnail,
+                    },
                 },
-            }],
-            components: [
-                buttonRow
-            ]
+            ],
+            components: [buttonRow],
         });
     }
 }
 
 module.exports = NowPlaying;
-
