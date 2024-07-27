@@ -82,6 +82,18 @@ module.exports = async (Bot, client, interaction) => {
         const button = client.buttons.get(interaction.customId);
         if (!button) return;
         try {
+            const vChannel = interaction.member.voice.channel;
+            const botChannel = interaction.guild.me.voice.channel;
+            if (vChannel !== botChannel) {
+                return interaction.reply({
+                    embeds: [{
+                        title: "Error",
+                        description: "You need to be in the same voice channel as me to use song buttons.",
+                        color: Bot.constants.colors.red
+                    }],
+                    ephemeral: true,
+                });
+            }
             await button.run(interaction, client);
         } catch (error) {
             Bot.logger.error("An error occurred whilst attempting to execute a button command:");
