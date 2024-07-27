@@ -26,20 +26,19 @@ const player = new Player(client, {
 
 player.events.on("playerStart", (queue, track) => {
     // we will later define queue.metadata object while creating the queue
+    const embed = new EmbedBuilder()
+        .setColor("Green")
+        .setTitle("🎶 | Now Playing")
+        .setDescription(`**${track.title}**`)
+        .setThumbnail(track.thumbnail)
+        .addFields([
+            { name: "DURATION", value: `${track?.duration ? track.duration : "N/A"}s`, inline: true },
+            { name: "REQUESTER", value: `${track.requestedBy}`, inline: true },
+            { name: "ARTIST", value: track.author, inline: true },
+            { name: "URL", value: `**[Click Here](${track.url})**`, inline: false },
+        ]);
     queue.metadata.channel.send({
-        embeds: [
-            new EmbedBuilder()
-                .setColor("Green")
-                .setTitle("🎶 | Now Playing")
-                .setDescription(`**${track.title}**`)
-                .setThumbnail(track.thumbnail)
-                .addFields([
-                    { name: "DURATION", value: `${track?.duration ? track.duration : "N/A"}s`, inline: true },
-                    { name: "REQUESTER", value: `${track.requestedBy}`, inline: true },
-                    { name: "ARTIST", value: track.author, inline: true },
-                    { name: "URL", value: `**[Click Here](${track.url})**`, inline: false },
-                ]),
-        ],
+        embeds: [ embed ],
         components: [buttonRow],
     });
 });

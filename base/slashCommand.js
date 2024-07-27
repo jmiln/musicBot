@@ -31,7 +31,7 @@ class slashCommand {
         }
         optionsOut.title = options?.title || "Error";
         optionsOut.color = options?.color || this.Bot.constants.colors.red;
-        if (options.example) {
+        if (options?.example) {
             errMsgOut += `\n\n**Example:**${this.Bot.codeBlock(options.example)}`;
         }
         await this.embed(interaction, errMsgOut, optionsOut);
