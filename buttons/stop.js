@@ -1,12 +1,13 @@
-const { useMainPlayer } = require("discord-player");
+const { useMainPlayer, useQueue } = require("discord-player");
 
 module.exports = {
     name: "stop_song",
     async run(interaction) {
         const player = useMainPlayer();
-        const queue = player?.nodes.get(interaction.guild.id);
+        // const queue = player?.nodes.get(interaction.guild.id);
+        const queue = useQueue(interaction.guild.id);
 
-        if (!queue || !queue.isPlaying()) {
+        if (!queue?.isPlaying()) {
             return await interaction.reply({
                 embeds: [
                     {
@@ -17,7 +18,7 @@ module.exports = {
             });
         }
 
-        queue.delete();
+        queue.node.stop();
 
         return await interaction.reply({
             embeds: [
