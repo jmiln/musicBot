@@ -82,8 +82,8 @@ module.exports = async (Bot, client, interaction) => {
         const button = client.buttons.get(interaction.customId);
         if (!button) return;
         try {
-            const vChannel = interaction.member.voice.channel;
-            const botChannel = interaction.guild.me.voice.channel;
+            const vChannel = interaction.member?.voice.channel;
+            const botChannel = interaction.guild.me?.voice.channel;
             if (vChannel !== botChannel) {
                 return interaction.reply({
                     embeds: [{
