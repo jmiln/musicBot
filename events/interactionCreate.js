@@ -1,4 +1,7 @@
 const { inspect } = require("node:util");
+const { useMainPlayer, useQueue } = require("discord-player");
+const { GuildMember } = require("discord.js");
+
 const ignoreArr = [
     "DiscordAPIError: Missing Access",
     "HTTPError [AbortError]: The user aborted a request.",
@@ -81,10 +84,14 @@ module.exports = async (Bot, client, interaction) => {
     } else if (interaction.isButton()) {
         const button = client.buttons.get(interaction.customId);
         if (!button) return;
+
         try {
-            const vChannel = interaction.member?.voice.channel;
-            const botChannel = interaction.guild.me?.voice.channel;
-            if (vChannel !== botChannel) {
+            const queue = useQueue(interaction.guildId);
+
+            // If there is no queue or the bot is not in a voice channel, then move along
+            if (!queue?.dispatcher) return;
+
+            if (interaction.member instanceof GuildMember && interaction.member.voice.channel?.id !== queue.dispatcher.channel.id) {
                 return interaction.reply({
                     embeds: [{
                         title: "Error",
