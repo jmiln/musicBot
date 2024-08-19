@@ -95,18 +95,14 @@ player.events.on("emptyQueue", (queue) => {
 // Load in various general functions for the bot
 require("./modules/functions.js")(Bot, client);
 
-// Set up a collection for the slash Commands
-// TODO Do the same for buttons and such
+// Set up a collection for the slash commands and buttons
 client.slashcmds = new Collection();
 client.buttons = new Collection();
 
 const init = async () => {
     await player.extractors.loadDefault();
+    // await player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
     // console.log(Bot.player.scanDeps());
-    // const { MongoClient } = require("mongodb");
-    // Bot.mongo = await MongoClient.connect(Bot.config.mongodb.url);
-    // // Set up the caching
-    // Bot.cache   = require("./modules/cache.js")(Bot.mongo);
 
     const Logger = require("./modules/Logger.js");
     Bot.logger = new Logger(Bot, client);
@@ -153,7 +149,7 @@ const init = async () => {
         try {
             const button = require(buttonPath);
             client.buttons.set(button.name, button);
-            // delete require.cache[require.resolve(buttonPath)];
+            delete require.cache[require.resolve(buttonPath)];
         } catch (err) {
             buttonError.push(`Unable to load button: ${buttonName}`);
             console.error(err);

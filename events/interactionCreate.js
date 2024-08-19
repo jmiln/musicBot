@@ -1,6 +1,7 @@
 const { inspect } = require("node:util");
 const { useMainPlayer, useQueue } = require("discord-player");
 const { GuildMember } = require("discord.js");
+const config = require("../config");
 
 const ignoreArr = [
     "DiscordAPIError: Missing Access",
@@ -43,6 +44,9 @@ module.exports = async (Bot, client, interaction) => {
 
         // Run the command
         try {
+            if (config.userBlacklist.includes(interaction.user.id)) {
+                return interaction.reply({ content: "Sorry, but you don't have permission to run that command.", ephemeral: true });
+            }
             await cmd.run(Bot, interaction);
             // console.log(`[interCreate] Trying to run: ${cmd.commandData.name}\n - Options: ${inspect(interaction.options, {depth: 5})}`);
         } catch (err) {

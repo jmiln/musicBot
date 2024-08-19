@@ -18,7 +18,7 @@
         "@discordjs/builders": "^1.8.2",
         "@discordjs/rest": "^2.3.0",
         "@discordjs/voice": "^0.17.0",
-        "@distube/ytdl-core": "^4.14.3",
+        "@distube/ytdl-core": "^4.14.4",
         "@web-scrobbler/metadata-filter": "^3.2.0",
         "discord-player": "^6.6.8",
         "discord.js": "^14.15.3",
