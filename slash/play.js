@@ -2,8 +2,6 @@ const Command = require("../base/slashCommand");
 const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
 const { useMainPlayer } = require("discord-player");
 
-// 993765001892474984
-
 class Play extends Command {
     constructor(Bot) {
         super(Bot, {
@@ -49,6 +47,19 @@ class Play extends Command {
             return super.error(interaction, `❌ | No Video/Song/Playlist was found when searching for: ${query}`);
         }
 
+        if (res?.tracks?.[0]?.title) {
+            await interaction.editReply({
+                content: null,
+                embeds: [
+                    {
+                        description: `🔎 | Found title: ${res.tracks[0].title}`,
+                    },
+                ],
+            });
+        } else {
+            return super.error(interaction, `❌ | No Video/Song/Playlist was found when searching for: ${query}`);
+        }
+
         try {
             const {track, searchResult} = await player.play(vChannel, res, {
                 nodeOptions: {
@@ -64,6 +75,8 @@ class Play extends Command {
                     deaf: true,
                 }
             });
+
+            // console.log(`[PLAY] ${track.title} requested by ${interaction.user.tag} (${interaction.user.id})`);
 
             const playEmbed = new EmbedBuilder()
                 .setColor("Random")

@@ -47,8 +47,8 @@ module.exports = async (Bot, client, interaction) => {
             if (config.userBlacklist.includes(interaction.user.id)) {
                 return interaction.reply({ content: "Sorry, but you don't have permission to run that command.", ephemeral: true });
             }
-            await cmd.run(Bot, interaction);
             // console.log(`[interCreate] Trying to run: ${cmd.commandData.name}\n - Options: ${inspect(interaction.options, {depth: 5})}`);
+            await cmd.run(Bot, interaction);
         } catch (err) {
             if (cmd.commandData.name === "test") {
                 return console.log(

@@ -4,6 +4,8 @@ const { inspect } = require("node:util");
 const { Player } = require("discord-player");
 
 const { buttonRow } = require("./modules/buttons.js");
+const { DefaultExtractors } = require("@discord-player/extractor");
+const { SpotifyExtractor } = require("discord-player-spotify");
 
 const Bot = {};
 
@@ -12,17 +14,10 @@ Bot.config = require("./config.js");
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates],
-    closeTimeout: 30_000,
+    // closeTimeout: 30_000,
 });
 
-const player = new Player(client, {
-    ytdlOptions: {
-        quality: "highestaudio",
-        filter: "audioonly",
-        highWaterMark: 1 << 30,
-        dlChunkSize: 0,
-    },
-});
+const player = new Player(client);
 
 player.events.on("playerStart", (queue, track) => {
     // we will later define queue.metadata object while creating the queue
@@ -100,9 +95,10 @@ client.slashcmds = new Collection();
 client.buttons = new Collection();
 
 const init = async () => {
-    await player.extractors.loadDefault();
-    // await player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
-    // console.log(Bot.player.scanDeps());
+    await player.extractors.register(SpotifyExtractor, {
+        market: "US"
+    });
+    await player.extractors.loadMulti(DefaultExtractors);
 
     const Logger = require("./modules/Logger.js");
     Bot.logger = new Logger(Bot, client);
