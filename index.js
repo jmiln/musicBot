@@ -95,9 +95,9 @@ client.slashcmds = new Collection();
 client.buttons = new Collection();
 
 const init = async () => {
-    await player.extractors.register(SpotifyExtractor, {
-        market: "US"
-    });
+    // await player.extractors.register(SpotifyExtractor, {
+    //     market: "US"
+    // });
     await player.extractors.loadMulti(DefaultExtractors);
 
     const Logger = require("./modules/Logger.js");
